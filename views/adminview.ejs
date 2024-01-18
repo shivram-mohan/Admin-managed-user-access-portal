@@ -1,0 +1,99 @@
+<!-- adminview.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <style> body {
+        padding: 20px; 
+    }
+
+    .btn-back {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    th, td {
+        text-align: center;
+        padding: 10px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    form {
+        margin: 0 5px;
+    }
+    .action-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-buttons form {
+            margin: 0 5px;
+        }
+
+        .action-buttons button {
+            margin-top: 5px; /* Add some spacing between buttons */
+        }
+    </style>
+    <title>Admin View</title>
+    <!-- Add your stylesheets or other meta tags here -->
+</head>
+<body>
+    <a href="/admin" class="btn btn-primary">Back</a>
+    <h2>User Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Picture</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% result.forEach(user => { %>
+                <tr>
+                    <td><%= user.userID %></td>
+                    <td><%= user.name %></td>
+                    <td><img src="<%= user.pic.data.toString('utf-8') %>" alt="" width="100"></td>
+                    <td class="action-buttons">
+                        <% if (!user.approvalStatus) { %>
+                            <form action="/approve" method="post">
+                                <input type="hidden" name="userID" value="<%= user.userID %>">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                        <% } %>
+                        <form action="/delete" method="post">
+                            <input type="hidden" name="userID" value="<%= user.userID %>">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+
+            <% if (result.length === 0) { %>
+                <tr>
+                    <td colspan="4">No user details found</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-rjzVpLjHkfayI3n+th2ARr8HXL4p1fdz9OW+5JbOaA28I3eWb1kkot0LKY7Bd8t" crossorigin="anonymous"></script>
+
+</body>
+</html>
